@@ -1,0 +1,143 @@
+pool:
+  vmImage: ubuntu-latest
+
+trigger: none
+
+# The resources section defines the pipelines that this pipeline depends on. In this case, the pipeline depends on the DevOps-Azure-AI-Demo pipeline and is triggered by the TriggerAiDebugPipeline stage in that pipeline.
+resources:
+  pipelines:
+    - pipeline: Failing-Build-Pipeline
+      project: DevOps-Azure-AI-Demo
+      source: Failing-Build-Pipeline
+      trigger: 
+        stages:
+          - TriggerAiDebugPipeline 
+
+
+# The variables section defines the variables that are used in the pipeline. The ORGANIZATION and PROJECT variables are used to construct the URLs for the Azure DevOps REST API. The ERROR_FILE variable is used to store the extracted errors from the failed build logs. 
+# The PAT, AZURE_OPENAI_API_KEY, AZURE_OPENAI_ENDPOINT, logicAppUrl variables are defined as secret variables in the pipeline through an attached variable group that retrieves the values from Azure Key Vault.
+variables:
+- group: 'ai-demo-vg'
+- name: ORGANIZATION
+  value: "hkaanturgut"
+- name: PROJECT
+  value: "DevOps-Azure-AI-Demo"
+- name: ERROR_FILE
+  value: "$(Build.SourcesDirectory)/error_log.json"
+  
+
+steps:
+
+# The first step in the pipeline is a script step that retrieves the build ID of the triggering pipeline (DevOps-Azure-AI-Demo) and sets it as a variable in the current pipeline. 
+# This step uses the resources.pipeline.<pipelineName>.runId syntax to access the run ID of the triggering pipeline.
+- script: |
+    echo "Triggered by build $(resources.pipeline.Failing-Build-Pipeline.runId)"
+    echo "##vso[task.setvariable variable=BUILD_ID]$(resources.pipeline.Failing-Build-Pipeline.runId)"
+  displayName: 'Get Build ID from first pipeline'
+
+
+# The second step in the pipeline is a script step that constructs the URL for the failed build in the Azure DevOps UI using the ORGANIZATION, PROJECT, and BUILD_ID variables. It then prints the URL to the console.
+- script: |
+    # Define variables
+    BUILD_URL="https://dev.azure.com/$ORGANIZATION/$PROJECT/_build/results?buildId=$BUILD_ID&view=results"
+    echo "Failed Build Link: $BUILD_URL"
+
+    # Fetch the list of logs for the current build
+    LOGS_URL="https://dev.azure.com/$ORGANIZATION/$PROJECT/_apis/build/builds/$BUILD_ID/logs?api-version=7.1"
+    echo "Fetching logs from URL: $LOGS_URL"
+    LOGS_RESPONSE=$(curl -s -w "\nHTTP_STATUS_CODE:%{http_code}\n" -u ":$(PAT)" $LOGS_URL)
+
+    # Print the response
+    echo "Response:"
+    echo "$LOGS_RESPONSE"
+
+    # Extract HTTP status code
+    HTTP_STATUS_CODE=$(echo "$LOGS_RESPONSE" | grep "HTTP_STATUS_CODE" | cut -d':' -f2)
+
+    # Check if the response is not empty and status code is 200
+    if [ -n "$LOGS_RESPONSE" ] && [ "$HTTP_STATUS_CODE" -eq 200 ]; then
+      # Parse the log IDs from the response
+      LOG_IDS=$(echo "$LOGS_RESPONSE" | jq -r '.value[].id')
+      # Clear the error file
+      > $ERROR_FILE
+
+      # Iterate over each log ID and fetch the log content
+      for LOG_ID in $LOG_IDS; do
+        LOG_URL="https://dev.azure.com/$ORGANIZATION/$PROJECT/_apis/build/builds/$BUILD_ID/logs/$LOG_ID?api-version=7.1"
+        LOG_CONTENT=$(curl -s -u ":$(PAT)" $LOG_URL)
+        
+        # Process the log content as needed
+        echo "Log ID: $LOG_ID"
+        echo "$LOG_CONTENT"
+        # Extract errors from the log content
+        ERRORS=$(echo "$LOG_CONTENT" | grep "##\[error\]")
+        if [ -n "$ERRORS" ]; then
+          ERROR_MESSAGE=$(echo "$ERRORS" | sed 's/"/\\"/g' | tr '\n' ' ' | tr -d '\r')
+          echo '{
+        "pipeline_error": {
+            "step": "data_preprocessing",
+            "message": "'"$ERROR_MESSAGE"'",
+            "code": 1001,
+            "failed_build_link": "'"$BUILD_URL"'"
+        }
+    }' > $ERROR_FILE
+        fi
+      done
+
+      echo "Errors have been extracted to $ERROR_FILE"
+    else
+      echo "Failed to retrieve logs or no logs available. HTTP Status Code: $HTTP_STATUS_CODE"
+    fi
+
+    # please echo the error file to the terminal
+    echo "Errors: $(cat $ERROR_FILE)"
+  displayName: 'Retrieve failed build logs'
+  env:
+    PAT: $(PAT)
+  workingDirectory: $(Build.SourcesDirectory)
+
+
+# The third step in the pipeline is a script step that installs the openai Python package using pip. This package is required to run the ai-assistant.py script that interacts with the OpenAI API.
+- script: |
+    python3 -m pip install openai
+  displayName: 'Install openai package'
+
+
+# The fourth step in the pipeline is a script step that runs the ai-assistant.py script. This script uses the OpenAI API to generate text based on a prompt and saves the output to a file named output.json. 
+# The script reads the AZURE_OPENAI_API_KEY and AZURE_OPENAI_ENDPOINT environment variables to authenticate with the OpenAI API.
+- script: |
+    python3 ai-assistant.py
+  displayName: 'Run ai-assistant.py'
+  env:
+    AZURE-OPENAI-API-KEY: $(AZURE-OPENAI-API-KEY)
+    AZURE-OPENAI-ENDPOINT: $(AZURE-OPENAI-ENDPOINT)
+  workingDirectory: $(Build.SourcesDirectory)
+
+
+# The fifth step in the pipeline is a script step that reads the output.json file generated by the ai-assistant.py script and extracts the assistant_output field from the JSON content. 
+# It then sends a POST request to a Logic App endpoint with the extracted JSON content. The jq tool is used to extract the assistant_output field from the JSON content.
+- script: |
+    cat output.json
+  displayName: 'Show output.json'
+  workingDirectory: $(Build.SourcesDirectory)
+
+
+# The sixth step in the pipeline is a script step that reads the output.json file generated by the ai-assistant.py script and extracts the assistant_output field from the JSON content. 
+# It then sends a POST request to a Logic App endpoint with the extracted JSON content. The jq tool is used to extract the assistant_output field from the JSON content.
+- script: |
+    sudo apt-get update
+    sudo apt-get install -y jq
+  displayName: 'Install jq'
+  workingDirectory: $(Build.SourcesDirectory)
+
+
+# The seventh step in the pipeline is a script step that reads the output.json file generated by the ai-assistant.py script and extracts the assistant_output field from the JSON content. 
+# It then sends a POST request to a Logic App endpoint with the extracted JSON content. The jq tool is used to extract the assistant_output field from the JSON content.
+- script: |
+    jsonContent=$(cat $(Build.SourcesDirectory)/output.json | jq -c '.assistant_output')
+    curl -X POST \
+         -H "Content-Type: application/json" \
+         -d "$jsonContent" \
+         "$(logicAppUrl)"
+  displayName: 'Send output.json to Logic App'
+  workingDirectory: $(Build.SourcesDirectory)
