@@ -11,9 +11,8 @@ This repository showcases the implementation of **"Leveraging Azure OpenAI to Au
 
 ## Architecture Diagram
 
-![Architecture Diagram](https://raw.githubusercontent.com/hkaanturgut/Leveraging-Azure-Open-AI-to-Automatically-Troubleshoot-and-Solve-CI-CD-Problems/ai-demo/images/architecture-diagram.png)
-
-
+<img width="955" alt="Leveraging-Azure-Open-AI-to-Automatically-Troubleshoot-and-Solve-CI-CD-Problems" src="https://github.com/user-attachments/assets/491036f2-190a-41bf-81ee-b010422d77d4" />
+https://github.com/hkaanturgut/Leveraging-Azure-Open-AI-to-Automatically-Troubleshoot-and-Solve-CI-CD-Problems/blob/ai-demo/images/architecture-diagram.png
 
 ### 🎯 Project Goal
 To develop an **automated troubleshooting system** using **Azure AI Foundry** tools to analyze and resolve CI/CD pipeline errors without manual intervention. This project integrates cutting-edge AI solutions with robust DevOps practices to streamline debugging processes.
