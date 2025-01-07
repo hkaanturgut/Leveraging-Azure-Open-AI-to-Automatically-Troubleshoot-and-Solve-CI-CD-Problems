@@ -9,8 +9,6 @@ This repository showcases the implementation of **"Leveraging Azure OpenAI to Au
 
 ## Architecture Diagram
 
-## Architecture Diagram
-
 <img width="955" alt="Leveraging-Azure-Open-AI-to-Automatically-Troubleshoot-and-Solve-CI-CD-Problems" src="https://github.com/hkaanturgut/Leveraging-Azure-Open-AI-to-Automatically-Troubleshoot-and-Solve-CI-CD-Problems/blob/ai-demo/images/architecture-diagram.png" />
 
 
