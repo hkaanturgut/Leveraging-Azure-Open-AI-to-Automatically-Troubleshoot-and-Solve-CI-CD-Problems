@@ -1,0 +1,48 @@
+pool:
+  vmImage: 'ubuntu-latest'
+
+stages:
+- stage: BuildAndAnalyze
+  jobs:
+  - job: BrokenScriptJob
+    steps:
+    
+    
+    ## This task is a script task that runs a potentially failing command and exits with an error code. The continueOnError: true attribute is set to allow the pipeline to continue running even if this task fails. The name attribute is set to BrokenScript to identify the task in the pipeline.
+    # - script: |
+    #     echo "Running a potentially failing command..."
+    #     exit 1
+    #   displayName: 'Run broken script with error logging'
+    #   name: BrokenScript
+    
+    
+    # This task is a script task that runs a potentially failing command and exits with an error code. The continueOnError: true attribute is set to allow the pipeline to continue running even if this task fails. The name attribute is set to BrokenScript to identify the task in the pipeline.
+    # - task: TerraformTaskV4@4
+    #   inputs:
+    #     provider: 'azurerm'
+    #     command: 'init'
+
+    
+    
+    ## This task is a script task that runs a potentially failing command and exits with an error code. The continueOnError: true attribute is set to allow the pipeline to continue running even if this task fails. The name attribute is set to BrokenScript to identify the task in the pipeline.
+    - task: AzureRmWebAppDeployment@4
+      inputs:
+        ConnectionType: 'AzureRM'
+        azureSubscription: 'kaan-enterprise-svc'
+        appType: 'webApp'
+        WebAppName: 'test123'
+        packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+
+
+
+# The TriggerAiDebugPipeline stage is defined as a conditional stage that is triggered only when the BuildAndAnalyze stage fails. The dependsOn attribute is set to BuildAndAnalyze to ensure that the TriggerAiDebugPipeline stage is triggered only after the BuildAndAnalyze stage has completed. The condition attribute is set to failed() to trigger the stage only when the previous stage fails. The jobs section defines a single job named TriggerAiDebugPipeline with a single script step that echoes a message to the console.
+- stage: TriggerAiDebugPipeline
+  dependsOn: BuildAndAnalyze  
+  condition: failed()
+  jobs:
+  - job: TriggerAiDebugPipeline
+    steps:
+    - script: |
+        echo "Triggering the AI Debug pipeline..."
+      displayName: 'Trigger AI Debug pipeline'
+

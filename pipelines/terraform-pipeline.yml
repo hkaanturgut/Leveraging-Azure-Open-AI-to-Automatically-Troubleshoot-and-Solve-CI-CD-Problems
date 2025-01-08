@@ -1,0 +1,114 @@
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  # Azure service connection name
+  serviceConnectionName: 'kaan-enterprise-svc'
+  # Terraform configuration directory
+  terraformWorkingDirectory: '$(System.DefaultWorkingDirectory)/azure-ai-terraform'
+
+stages:
+- stage: TerraformInit
+  displayName: 'Terraform Format & Validate'
+  jobs:
+  - job: TerraformInit
+    displayName: 'Terraform Init'
+    steps:
+    - task: TerraformTaskV4@4
+      displayName: 'Terraform Init'
+      inputs:
+        provider: 'azurerm'
+        command: 'init'
+        workingDirectory: '$(terraformWorkingDirectory)'
+        backendServiceArm: '$(serviceConnectionName)'
+        backendAzureRmResourceGroupName: 'kaan-cc-ai-demo-comm-rg'
+        backendAzureRmStorageAccountName: 'kaaneuaidemotfst'
+        backendAzureRmContainerName: 'kaan-eu-ai-demo-tf-state-con'
+        backendAzureRmKey: 'terraform.tfstate'
+    - task: TerraformTaskV4@4
+      displayName: 'Terraform Format'
+      inputs:
+        provider: 'azurerm'
+        command: 'custom'
+        workingDirectory: '$(terraformWorkingDirectory)'
+        outputTo: 'console'
+        customCommand: 'fmt'
+        environmentServiceNameAzureRM: 'kaan-enterprise-svc'
+    - task: TerraformTaskV4@4
+      displayName: 'Terraform Validate'
+      inputs:
+        provider: 'azurerm'
+        command: 'validate'
+        workingDirectory: '$(terraformWorkingDirectory)'
+
+- stage: TerraformPlan
+  displayName: 'Terraform Plan'
+  dependsOn: TerraformInit
+  jobs:
+  - job: TerraformPlan
+    displayName: 'Terraform Plan'
+    steps:
+    - task: TerraformTaskV4@4
+      displayName: 'Terraform Init'
+      inputs:
+        provider: 'azurerm'
+        command: 'init'
+        workingDirectory: '$(terraformWorkingDirectory)'
+        backendServiceArm: '$(serviceConnectionName)'
+        backendAzureRmResourceGroupName: 'kaan-cc-ai-demo-comm-rg'
+        backendAzureRmStorageAccountName: 'kaaneuaidemotfst'
+        backendAzureRmContainerName: 'kaan-eu-ai-demo-tf-state-con'
+        backendAzureRmKey: 'terraform.tfstate'
+    - task: TerraformTaskV4@4
+      displayName: 'Terraform Plan'
+      inputs:
+        provider: 'azurerm'
+        command: 'plan'
+        workingDirectory: '$(terraformWorkingDirectory)'
+        environmentServiceNameAzureRM: 'kaan-enterprise-svc'
+        
+
+- stage: ManualApproval
+  displayName: 'Manual Approval'
+  dependsOn: TerraformPlan
+  jobs:
+  - job: ManualApproval
+    displayName: 'Manual Approval'
+    pool: server # Indicates an agentless job
+    steps:    
+    - task: ManualValidation@1
+      displayName: 'Manual Approval'
+      inputs:
+        notifyUsers: 'kaan.turgut@deop.ca'
+        approvers: 'kaan.turgut@deop.ca'
+        allowApproversToApproveTheirOwnRuns: true
+        instructions: 'Please review the Terraform plan and approve to proceed with apply.'
+
+- stage: TerraformApply
+  displayName: 'Terraform Apply'
+  dependsOn: ManualApproval
+  jobs:
+  - job: TerraformApply
+    displayName: 'Terraform Apply'
+    steps:
+    - task: TerraformTaskV4@4
+      displayName: 'Terraform Init'
+      inputs:
+        provider: 'azurerm'
+        command: 'init'
+        workingDirectory: '$(terraformWorkingDirectory)'
+        backendServiceArm: '$(serviceConnectionName)'
+        backendAzureRmResourceGroupName: 'kaan-cc-ai-demo-comm-rg'
+        backendAzureRmStorageAccountName: 'kaaneuaidemotfst'
+        backendAzureRmContainerName: 'kaan-eu-ai-demo-tf-state-con'
+        backendAzureRmKey: 'terraform.tfstate'
+    - task: TerraformTaskV4@4
+      displayName: 'Terraform Apply'
+      inputs:
+        provider: 'azurerm'
+        command: 'apply'
+        workingDirectory: '$(terraformWorkingDirectory)'
+        environmentServiceNameAzureRM: 'kaan-enterprise-svc'
