@@ -1,4 +1,4 @@
-<h1 align="center">🌟 Leveraging Azure OpenAI to Automatically Troubleshoot and Solve CI/CD Problems 🌟</h1>
+<h1 align="center"> Leveraging Azure OpenAI to Automatically Troubleshoot and Solve CI/CD Problems </h1>
 
 ---
 
@@ -105,6 +105,8 @@ Automates Terraform deployment with the following stages:
    - Requires manual review before proceeding.
 4. **TerraformApply**:
    - Applies the plan to deploy infrastructure.
+  
+<img width="955" alt="Leveraging-Azure-Open-AI-to-Automatically-Troubleshoot-and-Solve-CI-CD-Problems" src="https://github.com/hkaanturgut/Leveraging-Azure-Open-AI-to-Automatically-Troubleshoot-and-Solve-CI-CD-Problems/blob/ai-demo/images/ado%20tf%20pipeline.png" />
 
 ---
 
@@ -154,7 +156,7 @@ Designed to debug failures using AI tools:
 
 <img width="955" alt="Leveraging-Azure-Open-AI-to-Automatically-Troubleshoot-and-Solve-CI-CD-Problems" src="https://github.com/hkaanturgut/Leveraging-Azure-Open-AI-to-Automatically-Troubleshoot-and-Solve-CI-CD-Problems/blob/ai-demo/images/retrieve%20failed%20build%20logs%20via%20API.png" />
 
-- Uses OpenAI to suggest solutions.
+- Uses Azure AI Assistant to analyze the error and responses back with the error explanation, error cause and suggested solutions which I put in a json object.
 
 <img width="955" alt="Leveraging-Azure-Open-AI-to-Automatically-Troubleshoot-and-Solve-CI-CD-Problems" src="https://github.com/hkaanturgut/Leveraging-Azure-Open-AI-to-Automatically-Troubleshoot-and-Solve-CI-CD-Problems/blob/ai-demo/images/show%20output.png" />
 
@@ -165,14 +167,16 @@ Designed to debug failures using AI tools:
 
 ---
 
-## 🎉 Why This Project Stands Out
-- **Cutting-Edge AI Integration**: Uses Azure OpenAI for real-time debugging.
-- **Streamlined Automation**: Combines DevOps best practices with AI insights.
-- **Scalable Design**: Modular and reusable Terraform configurations.
+## Documentation References
 
----
+For more information, please refer to the following documentations:
 
-### 💡 How to Get Started
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/your-repo/azure-openai-cicd-debug.git
+- [What is Azure AI Foundry?](https://learn.microsoft.com/en-us/azure/ai-studio/what-is-ai-studio)
+- [Getting started with Azure OpenAI Assistants (Preview)](https://developer.hashicorp.com/terraform/language/stacks](https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/assistant))
+- [Use Terraform to create an Azure AI Foundry hub](https://www.hashicorp.com/blog/terraform-stacks-explained](https://learn.microsoft.com/en-us/azure/ai-studio/how-to/create-hub-terraform?tabs=azure-cli))
+
+## Upcoming Presentation and Demo Video
+
+A presentation and demo video will be coming soon...
+
+For more content, visit my YouTube channel: [Kaan in the Cloud](https://www.youtube.com/@KaanintheCloud)
