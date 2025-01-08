@@ -64,6 +64,8 @@ To develop an **automated troubleshooting system** using **Azure AI Foundry** to
 - **Use Cases**:
   - Manage specific AI use cases or applications.
   - Collaborate with data scientists and engineers.
+ 
+<img width="955" alt="Leveraging-Azure-Open-AI-to-Automatically-Troubleshoot-and-Solve-CI-CD-Problems" src="https://github.com/hkaanturgut/Leveraging-Azure-Open-AI-to-Automatically-Troubleshoot-and-Solve-CI-CD-Problems/blob/ai-demo/images/azure%20ai%20foundary%20interface.png" />
 
 ### 7️⃣ **Role Assignments**
 - Fine-grained access control for resources.
@@ -108,9 +110,13 @@ Automates Terraform deployment with the following stages:
 
 ## 🧑‍💻 AI Assistant Script
 
-A Python script that leverages Azure OpenAI to analyze CI/CD pipeline errors and suggest solutions.
-
+A Python script that leverages Azure OpenAI to analyze CI/CD pipeline errors and suggest solutions. OPENAI APIKEY and ENDPOINTS which are stored in key vault are being used to interact with the AI services.
 ### **Filepath**: [`./ai-assistant.py`](./ai-assistant.py)
+
+<img width="955" alt="Leveraging-Azure-Open-AI-to-Automatically-Troubleshoot-and-Solve-CI-CD-Problems" src="https://github.com/hkaanturgut/Leveraging-Azure-Open-AI-to-Automatically-Troubleshoot-and-Solve-CI-CD-Problems/blob/ai-demo/images/ai%20services%20api%20key%20and%20endpoint.png" />
+
+<img width="955" alt="Leveraging-Azure-Open-AI-to-Automatically-Troubleshoot-and-Solve-CI-CD-Problems" src="https://github.com/hkaanturgut/Leveraging-Azure-Open-AI-to-Automatically-Troubleshoot-and-Solve-CI-CD-Problems/blob/ai-demo/images/ai%20assistant.png" />
+
 
 ---
 
@@ -141,6 +147,8 @@ Designed to debug failures using AI tools:
 - Uses credentials as secrets variable from key vault secrets through azure devops variable groups
 
 <img width="955" alt="Leveraging-Azure-Open-AI-to-Automatically-Troubleshoot-and-Solve-CI-CD-Problems" src="https://github.com/hkaanturgut/Leveraging-Azure-Open-AI-to-Automatically-Troubleshoot-and-Solve-CI-CD-Problems/blob/ai-demo/images/kv%20secrets.png" />
+
+<img width="955" alt="Leveraging-Azure-Open-AI-to-Automatically-Troubleshoot-and-Solve-CI-CD-Problems" src="https://github.com/hkaanturgut/Leveraging-Azure-Open-AI-to-Automatically-Troubleshoot-and-Solve-CI-CD-Problems/blob/ai-demo/images/ado%20variable%20group.png" />
 
 - Retrieves and analyzes logs.
 
