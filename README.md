@@ -123,6 +123,9 @@ Simulates pipeline failures and triggers debugging:
    - Runs tasks while tolerating failures for debugging.
 2. **TriggerAiDebugPipeline Stage**:
    - Initiates AI debugging if failures occur.
+  
+<img width="955" alt="Leveraging-Azure-Open-AI-to-Automatically-Troubleshoot-and-Solve-CI-CD-Problems" src="https://github.com/hkaanturgut/Leveraging-Azure-Open-AI-to-Automatically-Troubleshoot-and-Solve-CI-CD-Problems/blob/ai-demo/images/failed%20pipeline%20with%20error.png" />
+
 
 ---
 
@@ -131,9 +134,26 @@ Simulates pipeline failures and triggers debugging:
 ### **Filepath**: [`pipelines/ai-debug-pipeline.yml`](pipelines/ai-debug-pipeline.yml)
 
 Designed to debug failures using AI tools:
+- Gets triggered by failed pipeline
+
+<img width="955" alt="Leveraging-Azure-Open-AI-to-Automatically-Troubleshoot-and-Solve-CI-CD-Problems" src="https://github.com/hkaanturgut/Leveraging-Azure-Open-AI-to-Automatically-Troubleshoot-and-Solve-CI-CD-Problems/blob/ai-demo/images/triggereted%20ai%20debug%20pipeline.png" />
+
+- Uses credentials as secrets variable from key vault secrets through azure devops variable groups
+
+<img width="955" alt="Leveraging-Azure-Open-AI-to-Automatically-Troubleshoot-and-Solve-CI-CD-Problems" src="https://github.com/hkaanturgut/Leveraging-Azure-Open-AI-to-Automatically-Troubleshoot-and-Solve-CI-CD-Problems/blob/ai-demo/images/kv%20secrets.png" />
+
 - Retrieves and analyzes logs.
+
+<img width="955" alt="Leveraging-Azure-Open-AI-to-Automatically-Troubleshoot-and-Solve-CI-CD-Problems" src="https://github.com/hkaanturgut/Leveraging-Azure-Open-AI-to-Automatically-Troubleshoot-and-Solve-CI-CD-Problems/blob/ai-demo/images/retrieve%20failed%20build%20logs%20via%20API.png" />
+
 - Uses OpenAI to suggest solutions.
-- Sends results to a Logic App for processing.
+
+<img width="955" alt="Leveraging-Azure-Open-AI-to-Automatically-Troubleshoot-and-Solve-CI-CD-Problems" src="https://github.com/hkaanturgut/Leveraging-Azure-Open-AI-to-Automatically-Troubleshoot-and-Solve-CI-CD-Problems/blob/ai-demo/images/show%20output.png" />
+
+- Sends results to a Logic App to send out the communications into a Microsoft Teams Chat.
+
+<img width="955" alt="Leveraging-Azure-Open-AI-to-Automatically-Troubleshoot-and-Solve-CI-CD-Problems" src="https://github.com/hkaanturgut/Leveraging-Azure-Open-AI-to-Automatically-Troubleshoot-and-Solve-CI-CD-Problems/blob/ai-demo/images/ai%20teams%20chat%20message.png" />
+
 
 ---
 
