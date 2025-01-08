@@ -26,6 +26,10 @@ To develop an **automated troubleshooting system** using **Azure AI Foundry** to
 
 ## 🚀 Provisioned Resources
 
+<img width="955" alt="Leveraging-Azure-Open-AI-to-Automatically-Troubleshoot-and-Solve-CI-CD-Problems" src="https://github.com/hkaanturgut/Leveraging-Azure-Open-AI-to-Automatically-Troubleshoot-and-Solve-CI-CD-Problems/blob/ai-demo/images/azure%20resources.png" />
+
+### Note: I provisioned AI resources in "East US" eventhough I'm in Canada as AI Assitant is not supported in Canada regions yet...
+
 ### 1️⃣ **Resource Group**
 - Logical container for managing all provisioned Azure resources.
 - Simplifies organization and access management.
