@@ -7,6 +7,12 @@
 
 This repository showcases the implementation of **"Leveraging Azure OpenAI to Automatically Troubleshoot and Solve CI/CD Problems"**, a custom project by **Kaan Turgut**.
 
+## Video Demo
+
+[![Watch the video](https://img.youtube.com/vi/2e5I3OjtLp0/maxresdefault.jpg)](https://www.youtube.com/watch?v=2e5I3OjtLp0)
+
+For more content, visit my YouTube channel: [Kaan in the Cloud](https://www.youtube.com/@KaanintheCloud)
+
 ## Architecture Diagram
 
 <img width="955" alt="Leveraging-Azure-Open-AI-to-Automatically-Troubleshoot-and-Solve-CI-CD-Problems" src="https://github.com/hkaanturgut/Leveraging-Azure-Open-AI-to-Automatically-Troubleshoot-and-Solve-CI-CD-Problems/blob/main/images/architecture-diagram.png" />
@@ -178,9 +184,3 @@ For more information, please refer to the following documentations:
 - [What is Azure AI Foundry?](https://learn.microsoft.com/en-us/azure/ai-studio/what-is-ai-studio)
 - [Getting started with Azure OpenAI Assistants (Preview)](https://developer.hashicorp.com/terraform/language/stacks](https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/assistant))
 - [Use Terraform to create an Azure AI Foundry hub](https://www.hashicorp.com/blog/terraform-stacks-explained](https://learn.microsoft.com/en-us/azure/ai-studio/how-to/create-hub-terraform?tabs=azure-cli))
-
-## Upcoming Presentation and Demo Video
-
-A presentation and demo video will be coming soon...
-
-For more content, visit my YouTube channel: [Kaan in the Cloud](https://www.youtube.com/@KaanintheCloud)
